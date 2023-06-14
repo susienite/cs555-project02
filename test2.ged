@@ -1,0 +1,15 @@
+0 HEAD
+1 SOUR Family Echo
+2 WWW http://www.familyecho.com/
+1 FILE My Family
+1 DATE 1 JUN 2023
+2 NAME Susan Tan
+0 @I1@ INDI
+1 NAME Dani /Tan/
+2 GIVN Dani
+2 SURN Tan
+2 _MARNM Tan
+1 SEX F
+1 BIRT
+2 DATE 8 MAR 1997
+1 FAMC @F1@
