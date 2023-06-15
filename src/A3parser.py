@@ -2,6 +2,10 @@ import sys
 from datetime import date, datetime
 from prettytable import PrettyTable
 
+from helper import *
+from stories.birth_before_marriage import check_birth_before_marriage
+from stories.marriage_after_14 import check_marriage_after_14
+
 valid_tags = {'INDI': '0', 'NAME': '1', 'SEX': '1', 'BIRT': '1', 'DEAT': '1', 'FAMC': '1', 
             'FAMS': '1', 'FAM': '0', 'HUSB': '1', 'WIFE': '1', 'CHIL': '1', 'MARR':'1' ,'DIV': '1', 
             'DATE': '2', 'HEAD': '0','TRLR': '0', 'NOTE': '0'}
@@ -9,6 +13,16 @@ ignore_tags = ['HEAD', 'TRLR', 'NOTE']
 date_tags = ['BIRT', 'DEAT', 'DIV', 'MARR']
 months_conv = {  'JAN': 1, 'FEB': 2, 'MAR': 3, 'APR': 4, 'MAY': 5, 'JUN': 6, 'JUL': 7, 'AUG': 8,
             'SEP': 9, 'OCT': 10, 'NOV': 11, 'DEC':12}
+
+def find_stories(indi_data, fam_data):
+    errors, anomalies = [], []
+    # add story functions here
+    check_birth_before_marriage(indi_data, fam_data, errors)
+    check_marriage_after_14(indi_data, fam_data, errors)
+    # ...
+    
+    return (errors, anomalies)
+
 
 def extract(word):
     word = word.replace('@','')
@@ -19,39 +33,7 @@ def convertDate(arg):
     month = months_conv[arg[1]]
     year = int(arg[2])
     return date(year, month,day)
-
-def computeAgeFromToday(birth):
-    today = date.today()
-    age = today.year - birth.year - ((today.month, today.day) < (birth.month, birth.day))
-    return age
-
-def computeAgeFromDeath(birth, death):
-    age = death.year - birth.year - ((death.month, death.day) < (birth.month, birth.day))
-    return age
-
-
-def getSpouseName(table, id):
-    for row in table:
-        if (row['ID'] == id): return row['Name']
     
-def getIndiById(table, id):
-    for row in table:
-        if (row['ID'] == id): return row
-    
-# 1 if date1 is later than date2, -1 if date1 is earlier than date2, 0 if equal
-def compareDates(date1, date2):
-    d1 = date1.split('-')
-    d1y, d1m, d1d = (int(d1[0]), int(d1[1]), int(d1[2]))
-    d2 = date2.split('-')
-    d2y, d2m, d2d = (int(d2[0]), int(d2[1]), int(d2[2]))
-    
-    if(d1y > d2y): return 1
-    if(d1y < d2y): return -1
-    if(d1m > d2m): return 1
-    if(d1m < d2m): return -1
-    if(d1d > d2d): return 1
-    if(d1d < d2d): return -1
-    return 0
     
 def parser(filename):
     #parse GEDCOM data into list of (list of words = one line) 
@@ -155,42 +137,13 @@ def parser(filename):
     
     return indi_data, fam_data
 
-def check_birth_before_marriage(indi_data, fam_data, errors):
-    for fam in fam_data:
-        husb_data = getIndiById(indi_data, fam['HusbandId'])
-        wife_data = getIndiById(indi_data, fam['WifeId'])
-        if(husb_data['Birthday'] == 'NA' or wife_data['Birthday'] == 'NA' or fam['Married'] == 'NA'): continue #TODO: how to handle NA dates?
-        if(compareDates(husb_data['Birthday'], fam['Married']) != -1):
-            errors.append(f'ERROR: INDIVIDUAL: US02: Birth date ({husb_data["Birthday"]}) of {husb_data["Name"]} ({husb_data["ID"]}) occurs on the same day or after his marriage date ({fam["Married"]})') #TODO: what is the US number? update for all errors/anomalies
-        if(compareDates(wife_data['Birthday'], fam['Married']) != -1):
-            errors.append(f'ERROR: INDIVIDUAL: US02: Birth date ({wife_data["Birthday"]}) of {wife_data["Name"]} ({wife_data["ID"]}) occurs on the same day or after her marriage ({fam["Married"]})')
-
-def check_marriage_after_14(indi_data, fam_data, errors):
-    for fam in fam_data:
-        husb_data = getIndiById(indi_data, fam['HusbandId'])
-        wife_data = getIndiById(indi_data, fam['WifeId'])
-        if(fam['Married'] == 'NA'): continue #TODO: handle NA dates
-        if(husb_data['Age'] < 14):
-            errors.append(f'ERROR: INDIVIDUAL: US10: {husb_data["Name"]} ({husb_data["ID"]}) married before 14 at {husb_data["Age"]}')
-        if(wife_data['Age'] < 14):
-            errors.append(f'ERROR: INDIVIDUAL: US10: {wife_data["Name"]} ({wife_data["ID"]}) married before 14 at {wife_data["Age"]}')
-
-def find_stories(indi_data, fam_data):
-    errors, anomalies = [], []
-    # add story functions here
-    check_birth_before_marriage(indi_data, fam_data, errors)
-    check_marriage_after_14(indi_data, fam_data, errors)
-    # ...
-    
-    return (errors, anomalies)
-
 def main(filename):
     indi_data, fam_data = parser(filename)
     
     # stories
     errors, anomalies = find_stories(indi_data, fam_data)
     for error in errors:
-        print(error) # use right format later
+        print(error)
     for anomaly in anomalies:
         print(anomaly) 
 
@@ -211,7 +164,4 @@ def main(filename):
 if __name__ == "__main__":
     file = sys.argv[1]
     main(file)
-
-
-
 
