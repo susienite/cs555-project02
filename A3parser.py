@@ -10,7 +10,6 @@ date_tags = ['BIRT', 'DEAT', 'DIV', 'MARR']
 months_conv = {  'JAN': 1, 'FEB': 2, 'MAR': 3, 'APR': 4, 'MAY': 5, 'JUN': 6, 'JUL': 7, 'AUG': 8,
             'SEP': 9, 'OCT': 10, 'NOV': 11, 'DEC':12}
 
-
 def extract(word):
     word = word.replace('@','')
     return word
@@ -35,7 +34,25 @@ def getSpouseName(table, id):
     for row in table:
         if (row['ID'] == id): return row['Name']
     
-
+def getIndiById(table, id):
+    for row in table:
+        if (row['ID'] == id): return row
+    
+# 1 if date1 is later than date2, -1 if date1 is earlier than date2, 0 if equal
+def compareDates(date1, date2):
+    d1 = date1.split('-')
+    d1y, d1m, d1d = (int(d1[0]), int(d1[1]), int(d1[2]))
+    d2 = date2.split('-')
+    d2y, d2m, d2d = (int(d2[0]), int(d2[1]), int(d2[2]))
+    
+    if(d1y > d2y): return 1
+    if(d1y < d2y): return -1
+    if(d1m > d2m): return 1
+    if(d1m < d2m): return -1
+    if(d1d > d2d): return 1
+    if(d1d < d2d): return -1
+    return 0
+    
 def parser(filename):
     #parse GEDCOM data into list of (list of words = one line) 
     lines =[] 
@@ -137,11 +154,45 @@ def parser(filename):
         row['Age'] = age
     
     return indi_data, fam_data
+
+def check_birth_before_marriage(indi_data, fam_data, errors):
+    for fam in fam_data:
+        husb_data = getIndiById(indi_data, fam['HusbandId'])
+        wife_data = getIndiById(indi_data, fam['WifeId'])
+        if(husb_data['Birthday'] == 'NA' or wife_data['Birthday'] == 'NA' or fam['Married'] == 'NA'): continue #TODO: how to handle NA dates?
+        if(compareDates(husb_data['Birthday'], fam['Married']) != -1):
+            errors.append(f'ERROR: INDIVIDUAL: US02: Birth date ({husb_data["Birthday"]}) of {husb_data["Name"]} ({husb_data["ID"]}) occurs on the same day or after his marriage date ({fam["Married"]})') #TODO: what is the US number? update for all errors/anomalies
+        if(compareDates(wife_data['Birthday'], fam['Married']) != -1):
+            errors.append(f'ERROR: INDIVIDUAL: US02: Birth date ({wife_data["Birthday"]}) of {wife_data["Name"]} ({wife_data["ID"]}) occurs on the same day or after her marriage ({fam["Married"]})')
+
+def check_marriage_after_14(indi_data, fam_data, errors):
+    for fam in fam_data:
+        husb_data = getIndiById(indi_data, fam['HusbandId'])
+        wife_data = getIndiById(indi_data, fam['WifeId'])
+        if(fam['Married'] == 'NA'): continue #TODO: handle NA dates
+        if(husb_data['Age'] < 14):
+            errors.append(f'ERROR: INDIVIDUAL: US10: {husb_data["Name"]} ({husb_data["ID"]}) married before 14 at {husb_data["Age"]}')
+        if(wife_data['Age'] < 14):
+            errors.append(f'ERROR: INDIVIDUAL: US10: {wife_data["Name"]} ({wife_data["ID"]}) married before 14 at {wife_data["Age"]}')
+
+def find_stories(indi_data, fam_data):
+    errors, anomalies = [], []
+    # add story functions here
+    check_birth_before_marriage(indi_data, fam_data, errors)
+    check_marriage_after_14(indi_data, fam_data, errors)
+    # ...
     
+    return (errors, anomalies)
 
 def main(filename):
-
     indi_data, fam_data = parser(filename)
+    
+    # stories
+    errors, anomalies = find_stories(indi_data, fam_data)
+    for error in errors:
+        print(error) # use right format later
+    for anomaly in anomalies:
+        print(anomaly) 
 
     indi_table = PrettyTable()
     indi_table.field_names = ['ID', 'Name', 'Gender', 'Birthday', 'Age', 'Alive', 'Death', 'Child', 'Spouse']
@@ -160,6 +211,7 @@ def main(filename):
 if __name__ == "__main__":
     file = sys.argv[1]
     main(file)
+
 
 
 
