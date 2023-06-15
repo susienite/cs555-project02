@@ -16,7 +16,7 @@ from stories.birth_before_marriage import check_birth_before_marriage
 class TestBirthBeforeMarriage(unittest.TestCase):
     def prep(self, filepath): 
         self.indi_data, self.fam_data = parser(filepath)
-        self.errors = [] 
+        self.errors = []    
         
     def tearDown(self): # reset errors after each test. https://docs.python.org/3/library/unittest.html#unittest.TestCase.setUp
         self.errors = []
