@@ -29,7 +29,7 @@ class TestSiblingSpacing(unittest.TestCase):
     def test_error_1(self):
         self.prep(f_errors)
         check_sibling_spacing(self.indi_data, self.fam_data, self.errors)
-        self.assertEqual(self.errors[0], "ANOMALY: FAMILY: US08: The birth dates of siblings Ryan Zheng (I8) and Bob Zheng (I1) are incorrectly spaced.")
+        self.assertEqual(self.errors[0], "ANOMALY: FAMILY: US13: The birth dates of siblings Ryan Zheng (I8) and Bob Zheng (I1) are incorrectly spaced.")
 
     def test_no_errors(self):
         self.prep(f_no_error)

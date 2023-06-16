@@ -29,12 +29,12 @@ class TestParentsTooOld(unittest.TestCase):
     def test_error_1(self):
         self.prep(f_errors)
         check_parents_not_too_old(self.indi_data, self.fam_data, self.errors)
-        self.assertEqual(self.errors[0], "ANOMALY: FAMILY: US08: F4: Father (I8) is more than 80 years older than child (I11)")
+        self.assertEqual(self.errors[0], "ANOMALY: FAMILY: US12: F4: Father (I8) is more than 80 years older than child (I11)")
 
     def test_error_2(self):
         self.prep(f_errors)
         check_parents_not_too_old(self.indi_data, self.fam_data, self.errors)
-        self.assertEqual(self.errors[1], "ANOMALY: FAMILY: US08: F4: Mother (I10) is more than 60 years older than child (I11)")
+        self.assertEqual(self.errors[1], "ANOMALY: FAMILY: US12: F4: Mother (I10) is more than 60 years older than child (I11)")
 
     def test_no_errors(self):
         self.prep(f_no_error)
