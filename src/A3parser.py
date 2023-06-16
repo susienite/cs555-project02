@@ -5,20 +5,21 @@ from prettytable import PrettyTable
 from helper import *
 from stories.birth_before_marriage import check_birth_before_marriage
 from stories.marriage_after_14 import check_marriage_after_14
+from stories.dates_before_current import check_dates_before_curr
+from stories.List_of_recent_deaths import make_list_of_recent_deaths
 
 valid_tags = {'INDI': '0', 'NAME': '1', 'SEX': '1', 'BIRT': '1', 'DEAT': '1', 'FAMC': '1', 
             'FAMS': '1', 'FAM': '0', 'HUSB': '1', 'WIFE': '1', 'CHIL': '1', 'MARR':'1' ,'DIV': '1', 
             'DATE': '2', 'HEAD': '0','TRLR': '0', 'NOTE': '0'}
 ignore_tags = ['HEAD', 'TRLR', 'NOTE']
 date_tags = ['BIRT', 'DEAT', 'DIV', 'MARR']
-months_conv = {  'JAN': 1, 'FEB': 2, 'MAR': 3, 'APR': 4, 'MAY': 5, 'JUN': 6, 'JUL': 7, 'AUG': 8,
-            'SEP': 9, 'OCT': 10, 'NOV': 11, 'DEC':12}
 
 def find_stories(indi_data, fam_data):
     errors, anomalies = [], []
     # add story functions here
     check_birth_before_marriage(indi_data, fam_data, errors)
     check_marriage_after_14(indi_data, fam_data, errors)
+    check_dates_before_curr(indi_data, fam_data, errors)
     # ...
     
     return (errors, anomalies)
@@ -27,12 +28,6 @@ def find_stories(indi_data, fam_data):
 def extract(word):
     word = word.replace('@','')
     return word
-
-def convertDate(arg):
-    day = int(arg[0])
-    month = months_conv[arg[1]]
-    year = int(arg[2])
-    return date(year, month,day)
     
     
 def parser(filename):
@@ -148,6 +143,7 @@ def main(filename):
         print(anomaly) 
 
     indi_table = PrettyTable()
+    indi_table.title = 'Individuals Table'
     indi_table.field_names = ['ID', 'Name', 'Gender', 'Birthday', 'Age', 'Alive', 'Death', 'Child', 'Spouse']
     for row in indi_data:
         row_values = row.values()
@@ -155,11 +151,15 @@ def main(filename):
     print(indi_table)
  
     family_table = PrettyTable()
+    family_table.title= 'Families Table'
     family_table.field_names = ['ID', 'Married','Divorced', 'HusbandId','HusbandName','WifeId','WifeName','Children']
     for row in fam_data:
         row_values = row.values()
         family_table.add_row(row_values)
     print(family_table) 
+
+    #story US36
+    make_list_of_recent_deaths(indi_data)
 
 if __name__ == "__main__":
     file = sys.argv[1]

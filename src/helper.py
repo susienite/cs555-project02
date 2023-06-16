@@ -1,4 +1,16 @@
-from datetime import date
+from datetime import date, datetime, timedelta
+
+months_conv = {  'JAN': 1, 'FEB': 2, 'MAR': 3, 'APR': 4, 'MAY': 5, 'JUN': 6, 'JUL': 7, 'AUG': 8,
+            'SEP': 9, 'OCT': 10, 'NOV': 11, 'DEC':12}
+
+def getToday():
+    return str(date.today())
+
+def convertDate(arg):
+    day = int(arg[0])
+    month = months_conv[arg[1]]
+    year = int(arg[2])
+    return date(year, month,day)
 
 def computeAgeFromToday(birth):
     today = date.today()
@@ -31,4 +43,14 @@ def compareDates(date1, date2):
     if(d1d > d2d): return 1
     if(d1d < d2d): return -1
     return 0
-    
+
+def days_before_today(days):
+    return date.today()-timedelta(days)
+
+def betweenTodayAndNum(inputDate, numOfDays):
+    date_obj = datetime.strptime(inputDate, '%Y-%m-%d').date()
+    if (days_before_today(numOfDays) <= date_obj <= date.today() ):
+        return True
+    else: return False 
+
+
