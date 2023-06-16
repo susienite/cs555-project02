@@ -14,10 +14,10 @@ def check_parents_not_too_old(indi_data, fam_data, anomalies):
                 child_birth = datetime.strptime(child_data['Birthday'], '%Y-%m-%d').date()
                 age_difference_husb = computeAgeFromDeath(child_birth, husb_birth)
                 if age_difference_husb > 80:
-                    anomalies.append(f'ANOMALY: FAMILY: US08: {fam["ID"]}: Father ({husb_data["ID"]}) is more than 80 years older than child ({child_data["ID"]})')
+                    anomalies.append(f'ANOMALY: FAMILY: US12: {fam["ID"]}: Father ({husb_data["ID"]}) is more than 80 years older than child ({child_data["ID"]})')
             if wife_data['Birthday'] != 'NA' and child_data['Birthday'] != 'NA':
                 wife_birth = datetime.strptime(wife_data['Birthday'], '%Y-%m-%d').date()
                 child_birth = datetime.strptime(child_data['Birthday'], '%Y-%m-%d').date()
                 age_difference_wife = computeAgeFromDeath(child_birth, wife_birth)
                 if age_difference_wife > 60:
-                    anomalies.append(f'ANOMALY: FAMILY: US08: {fam["ID"]}: Mother ({wife_data["ID"]}) is more than 60 years older than child ({child_data["ID"]})')
+                    anomalies.append(f'ANOMALY: FAMILY: US12: {fam["ID"]}: Mother ({wife_data["ID"]}) is more than 60 years older than child ({child_data["ID"]})')

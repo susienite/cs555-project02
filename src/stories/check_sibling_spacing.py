@@ -20,4 +20,4 @@ def check_sibling_spacing(indi_data, fam_data, anomalies):
             if 2 < day_diff < 30 * 8:
                 sibling1_data = getIndiById(indi_data, sibling1_id)
                 sibling2_data = getIndiById(indi_data, sibling2_id)
-                anomalies.append(f'ANOMALY: FAMILY: US08: The birth dates of siblings {sibling1_data["Name"]} ({sibling1_id}) and {sibling2_data["Name"]} ({sibling2_id}) are incorrectly spaced.')
+                anomalies.append(f'ANOMALY: FAMILY: US13: The birth dates of siblings {sibling1_data["Name"]} ({sibling1_id}) and {sibling2_data["Name"]} ({sibling2_id}) are incorrectly spaced.')
