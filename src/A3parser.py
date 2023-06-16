@@ -121,8 +121,12 @@ def parser(filename):
                     fam_data[fam_num-1]['Divorced'] = str(convertDate(list[2:]))
                     typeDate = ''      #needs to have an error if Date doesn't follow any of the 4 
     
-    #calculate age
+    #calculate age and make changes to pretty print table 
     for row in indi_data:
+        if (row['Child'] == []):
+            row['Child'] = 'None'
+        if (row['Spouse'] == []):
+            row['Spouse'] = 'NA'
         age = 0
         birth_object = row['Birthday']
         death_object = row['Death']
@@ -138,13 +142,6 @@ def parser(filename):
 
 def main(filename):
     indi_data, fam_data = parser(filename)
-    
-    # stories
-    errors, anomalies = find_stories(indi_data, fam_data)
-    for error in errors:
-        print(error)
-    for anomaly in anomalies:
-        print(anomaly) 
 
     indi_table = PrettyTable()
     indi_table.title = 'Individuals Table'
@@ -164,6 +161,13 @@ def main(filename):
 
     #story US36
     make_list_of_recent_deaths(indi_data)
+
+    #print all errors or anomolies
+    errors, anomalies = find_stories(indi_data, fam_data)
+    for error in errors:
+        print(error)
+    for anomal in anomalies:
+        print(anomal)
 
 if __name__ == "__main__":
     file = sys.argv[1]
