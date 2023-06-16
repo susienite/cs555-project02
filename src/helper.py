@@ -54,3 +54,15 @@ def betweenTodayAndNum(inputDate, numOfDays):
     else: return False 
 
 
+#Compute the difference between two dates in terms of months
+def computeAgeDifferenceInMonths(date1, date2):    
+    d1 = datetime.strptime(date1, '%Y-%m-%d')
+    d2 = datetime.strptime(date2, '%Y-%m-%d')
+    return (d2.year - d1.year) * 12 + d2.month - d1.month
+
+#Compute the difference between two dates in terms of days
+def computeAgeDifferenceInDays(date1, date2):
+    d1 = datetime.strptime(date1, '%Y-%m-%d')
+    d2 = datetime.strptime(date2, '%Y-%m-%d')
+    return (d2 - d1).days
+
