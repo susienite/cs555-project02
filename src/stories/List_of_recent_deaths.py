@@ -14,7 +14,8 @@ def make_list_of_recent_deaths(indi_data):
         elif (betweenTodayAndNum(death_date, 30)):
             table.add_row([person['ID'], person['Name'], death_date])
             list.append([person['ID'], person['Name'], death_date])
-    print(table)
+    return table
+
   
 
 

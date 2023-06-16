@@ -143,13 +143,13 @@ def parser(filename):
 def main(filename):
     indi_data, fam_data = parser(filename)
 
+    #make pretty tables
     indi_table = PrettyTable()
     indi_table.title = 'Individuals Table'
     indi_table.field_names = ['ID', 'Name', 'Gender', 'Birthday', 'Age', 'Alive', 'Death', 'Child', 'Spouse']
     for row in indi_data:
         row_values = row.values()
         indi_table.add_row(row_values)
-    print(indi_table)
  
     family_table = PrettyTable()
     family_table.title= 'Families Table'
@@ -157,17 +157,32 @@ def main(filename):
     for row in fam_data:
         row_values = row.values()
         family_table.add_row(row_values)
-    print(family_table) 
 
     #story US36
-    make_list_of_recent_deaths(indi_data)
+    recent_deaths_table = make_list_of_recent_deaths(indi_data)
 
-    #print all errors or anomolies
+    #all errors or anomolies
     errors, anomalies = find_stories(indi_data, fam_data)
-    for error in errors:
-        print(error)
-    for anomal in anomalies:
-        print(anomal)
+
+    #write to output file
+    with open('output.txt', 'w') as f:
+        itable = str(indi_table) + '\n'
+        ftable = str(family_table) + '\n'
+        deathstable = str(recent_deaths_table) + '\n'
+        f.write(itable)
+        f.write(ftable)
+        f.write(deathstable)
+        #... for future sprints
+
+        for e in errors:
+            err = e + '\n'
+            f.write(err)
+        for a in anomalies:
+            an = a + '\n'
+            f.write(an)
+        
+        f.flush()
+        f.close()
 
 if __name__ == "__main__":
     file = sys.argv[1]
