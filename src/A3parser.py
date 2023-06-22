@@ -9,6 +9,7 @@ from stories.dates_before_current import check_dates_before_curr
 from stories.List_of_recent_deaths import make_list_of_recent_deaths
 from stories.check_parents_not_too_old import check_parents_not_too_old
 from stories.check_sibling_spacing import check_sibling_spacing
+from stories.marriage_before_divorce2 import check_marriage_before_divorce
 
 valid_tags = {'INDI': '0', 'NAME': '1', 'SEX': '1', 'BIRT': '1', 'DEAT': '1', 'FAMC': '1', 
             'FAMS': '1', 'FAM': '0', 'HUSB': '1', 'WIFE': '1', 'CHIL': '1', 'MARR':'1' ,'DIV': '1', 
@@ -19,11 +20,16 @@ date_tags = ['BIRT', 'DEAT', 'DIV', 'MARR']
 def find_stories(indi_data, fam_data):
     errors, anomalies = [], []
     # add story functions here
+
+    #sprint 1
     check_birth_before_marriage(indi_data, fam_data, errors)
     check_marriage_after_14(indi_data, fam_data, errors)
     check_dates_before_curr(indi_data, fam_data, errors)
     check_parents_not_too_old(indi_data, fam_data, anomalies)
     check_sibling_spacing(indi_data, fam_data, anomalies)
+
+    #sprint 2 
+    check_marriage_before_divorce(fam_data, errors)
     # ...
     
     return (errors, anomalies)
