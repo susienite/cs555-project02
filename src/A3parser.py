@@ -9,6 +9,7 @@ from stories.dates_before_current import check_dates_before_curr
 from stories.List_of_recent_deaths import make_list_of_recent_deaths
 from stories.check_parents_not_too_old import check_parents_not_too_old
 from stories.check_sibling_spacing import check_sibling_spacing
+from stories.check_no_bigamy import check_no_bigamy
 
 valid_tags = {'INDI': '0', 'NAME': '1', 'SEX': '1', 'BIRT': '1', 'DEAT': '1', 'FAMC': '1', 
             'FAMS': '1', 'FAM': '0', 'HUSB': '1', 'WIFE': '1', 'CHIL': '1', 'MARR':'1' ,'DIV': '1', 
@@ -19,20 +20,22 @@ date_tags = ['BIRT', 'DEAT', 'DIV', 'MARR']
 def find_stories(indi_data, fam_data):
     errors, anomalies = [], []
     # add story functions here
+    # sprint1
     check_birth_before_marriage(indi_data, fam_data, errors)
     check_marriage_after_14(indi_data, fam_data, errors)
     check_dates_before_curr(indi_data, fam_data, errors)
     check_parents_not_too_old(indi_data, fam_data, anomalies)
     check_sibling_spacing(indi_data, fam_data, anomalies)
+    
+    check_no_bigamy(indi_data, fam_data, anomalies)
     # ...
     
     return (errors, anomalies)
 
-
 def extract(word):
     word = word.replace('@','')
     return word
-    
+
     
 def parser(filename):
     #parse GEDCOM data into list of (list of words = one line) 
@@ -163,26 +166,9 @@ def main(filename):
 
     #all errors or anomolies
     errors, anomalies = find_stories(indi_data, fam_data)
-
-    #write to output file
-    with open('output.txt', 'w') as f:
-        itable = str(indi_table) + '\n'
-        ftable = str(family_table) + '\n'
-        deathstable = str(recent_deaths_table) + '\n'
-        f.write(itable)
-        f.write(ftable)
-        f.write(deathstable)
-        #... for future sprints
-
-        for e in errors:
-            err = e + '\n'
-            f.write(err)
-        for a in anomalies:
-            an = a + '\n'
-            f.write(an)
-        
-        f.flush()
-        f.close()
+    
+    printOutput(indi_table, family_table, errors, anomalies)
+    # writeToOutput(indi_table, family_table, recent_deaths_table, errors, anomalies)
 
 if __name__ == "__main__":
     file = sys.argv[1]

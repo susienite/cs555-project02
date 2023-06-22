@@ -66,3 +66,31 @@ def computeAgeDifferenceInDays(date1, date2):
     d2 = datetime.strptime(date2, '%Y-%m-%d')
     return (d2 - d1).days
 
+def writeToOutput(indi_table, family_table, recent_deaths_table, errors, anomalies):
+    #write to output file
+    with open('output.txt', 'w') as f:
+        itable = str(indi_table) + '\n'
+        ftable = str(family_table) + '\n'
+        deathstable = str(recent_deaths_table) + '\n'
+        f.write(itable)
+        f.write(ftable)
+        f.write(deathstable)
+        #... for future sprints
+
+        for e in errors:
+            err = e + '\n'
+            f.write(err)
+        for a in anomalies:
+            an = a + '\n'
+            f.write(an)
+        
+        f.flush()
+        f.close()
+        
+def printOutput(indi_table, family_table, errors, anomalies):
+    for error in errors:
+        print(error)
+    for anomaly in anomalies:
+        print(anomaly) 
+    print(indi_table)
+    print(family_table) 
