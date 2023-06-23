@@ -10,5 +10,5 @@ def check_at_most_pentuplets(fam_data, anomalies):
                 else:
                     child_birthdays[child['Birthday']] += 1
             for birthday in child_birthdays:
-                if(child_birthdays[birthday] > 15):
+                if(child_birthdays[birthday] > 5):
                     anomalies.append(f'ANOMALY: FAMILY: US15: {fam["HusbandName"]} and {fam["WifeName"]} of {fam["ID"]} has more than 5 children (that are siblings) born on {birthday}')
