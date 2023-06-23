@@ -30,11 +30,11 @@ def find_stories(indi_data, fam_data):
     check_parents_not_too_old(indi_data, fam_data, anomalies)
     check_sibling_spacing(indi_data, fam_data, anomalies)
 
-    #sprint 2 
+    #sprint 2 & M5.B1
     check_marriage_before_divorce(fam_data, errors)
     check_no_bigamy(fam_data, anomalies)
     check_less_than_15_siblings(fam_data, errors)
-    check_at_most_pentuplets(fam_data, errors)
+    check_at_most_pentuplets(fam_data, errors) # collaborative driver/navigator function
     # ...
     
     return (errors, anomalies)
