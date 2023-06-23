@@ -12,6 +12,7 @@ from stories.check_sibling_spacing import check_sibling_spacing
 from stories.marriage_before_divorce2 import check_marriage_before_divorce
 from stories.check_no_bigamy import check_no_bigamy
 from stories.check_less_than_15_siblings import check_less_than_15_siblings
+from stories.check_at_most_pentuplets import check_at_most_pentuplets
 
 valid_tags = {'INDI': '0', 'NAME': '1', 'SEX': '1', 'BIRT': '1', 'DEAT': '1', 'FAMC': '1', 
             'FAMS': '1', 'FAM': '0', 'HUSB': '1', 'WIFE': '1', 'CHIL': '1', 'MARR':'1' ,'DIV': '1', 
@@ -33,6 +34,7 @@ def find_stories(indi_data, fam_data):
     check_marriage_before_divorce(fam_data, errors)
     check_no_bigamy(fam_data, anomalies)
     check_less_than_15_siblings(fam_data, errors)
+    check_at_most_pentuplets(fam_data, errors)
     # ...
     
     return (errors, anomalies)
