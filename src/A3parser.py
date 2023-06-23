@@ -11,6 +11,7 @@ from stories.check_parents_not_too_old import check_parents_not_too_old
 from stories.check_sibling_spacing import check_sibling_spacing
 from stories.marriage_before_divorce2 import check_marriage_before_divorce
 from stories.check_no_bigamy import check_no_bigamy
+from stories.check_less_than_15_siblings import check_less_than_15_siblings
 
 valid_tags = {'INDI': '0', 'NAME': '1', 'SEX': '1', 'BIRT': '1', 'DEAT': '1', 'FAMC': '1', 
             'FAMS': '1', 'FAM': '0', 'HUSB': '1', 'WIFE': '1', 'CHIL': '1', 'MARR':'1' ,'DIV': '1', 
@@ -30,6 +31,8 @@ def find_stories(indi_data, fam_data):
 
     #sprint 2 
     check_marriage_before_divorce(fam_data, errors)
+    check_no_bigamy(fam_data, anomalies)
+    check_less_than_15_siblings(fam_data, errors)
     # ...
     
     return (errors, anomalies)
@@ -158,7 +161,7 @@ def main(filename):
  
     family_table = PrettyTable()
     family_table.title= 'Families Table'
-    family_table.field_names = ['ID', 'Married','Divorced', 'HusbandId','HusbandName','WifeId','WifeName','Children']
+    family_table.field_names = ['ID', 'Married', 'Divorced', 'HusbandId', 'HusbandName', 'WifeId', 'WifeName', 'Children']
     for row in fam_data:
         row_values = row.values()
         family_table.add_row(row_values)

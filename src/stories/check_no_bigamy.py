@@ -1,6 +1,6 @@
 from helper import *
 
-def check_no_bigamy(indi_data, fam_data, anomalies):
+def check_no_bigamy(fam_data, anomalies):
     married = {}
     for fam in fam_data:
         if(fam['HusbandId'] not in married.keys() and fam['Divorced'] == 'NA'):
