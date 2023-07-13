@@ -2,7 +2,7 @@ from helper import *
 
 def check_at_most_pentuplets(fam_data, anomalies):
     for fam in fam_data:
-        if (fam['Children'].length > 5):
+        if (len(fam['Children']) > 5):
             child_birthdays = {}
             for child in fam['Children']:
                 if(child_birthdays[child['Birthday']] == None):

@@ -6,7 +6,7 @@ from helper import *
 from stories.birth_before_marriage import check_birth_before_marriage
 from stories.marriage_after_14 import check_marriage_after_14
 from stories.dates_before_current import check_dates_before_curr
-from stories.List_of_recent_deaths import make_list_of_recent_deaths
+from stories.list_recent_deaths_and_births import make_list_of_recent
 from stories.check_parents_not_too_old import check_parents_not_too_old
 from stories.check_sibling_spacing import check_sibling_spacing
 from stories.marriage_before_divorce2 import check_marriage_before_divorce
@@ -39,10 +39,18 @@ def find_stories(indi_data, fam_data):
     
     return (errors, anomalies)
 
+def make_list(indi_data, fam_data):
+    all_lists = []
+
+    #sprint 2 
+    all_lists.append(make_list_of_recent(indi_data, 'Death'))
+    all_lists.append(make_list_of_recent(indi_data, 'Birthday'))
+
+    return all_lists
+
 def extract(word):
     word = word.replace('@','')
     return word
-
     
 def parser(filename):
     #parse GEDCOM data into list of (list of words = one line) 
@@ -60,6 +68,7 @@ def parser(filename):
     fam_num = 0 
     typeDate = ''   #birth, death, div, marr
 
+    #read each line and make inidividual or family record 
     for list in lines:
         if (list[1] in ignore_tags): #ignore some tags
             continue 
@@ -78,75 +87,79 @@ def parser(filename):
             else:
                 continue
     
-        
-        #valid tag and number?
+
+        #check if valid tag and tag matches number 
         if (list[1] not in valid_tags.keys()):
             continue
         elif (list[0] != valid_tags[list[1]]):
             continue
-        else: #yes
+        else: 
+            #VALID 
+            #convert end arguments to a string
             endArgs = " ".join(list[2:])
             
-            #Dates are weird
+            #remember type of DATE 
             if (list[1] in date_tags):
                 if (list[1] == 'BIRT'): typeDate = "bir"
                 if (list[1] == 'DEAT'): typeDate = "dea"
                 if (list[1] == 'DIV'): typeDate = "div"
                 if (list[1] == 'MARR'): typeDate = "mar"
-                continue
+                continue   #skip to next line
 
             #individual attributes 
             if (list[1] == 'NAME'): indi_data[it_num-1]['Name'] = endArgs
             if(list[1] == 'SEX'): indi_data[it_num-1]['Gender'] = endArgs
             if (list[1] == 'DATE'): 
                 if (typeDate == "bir"): 
-                    indi_data[it_num-1]['Birthday'] = convertDate(list[2:])
+                    indi_data[it_num-1]['Birthday'] = convertArgToDate(list[2:])
                     typeDate = ''   #reset
                 if (typeDate == "dea"):
-                    indi_data[it_num-1]['Death'] = convertDate(list[2:])
+                    indi_data[it_num-1]['Death'] = convertArgToDate(list[2:])
                     indi_data[it_num-1]['Alive'] = False
                     typeDate = ''
             if (list[1] == 'FAMC'): 
-                indi_data[it_num-1]['Child'].append(extract(endArgs))
+                    indi_data[it_num-1]['Child'].append(extract(endArgs))
             if (list[1] == 'FAMS'): 
-                indi_data[it_num-1]['Spouse'].append(extract(endArgs))
-            
+                    indi_data[it_num-1]['Spouse'].append(extract(endArgs))
+                
             #family attributes
             if(list[1] == 'HUSB'): 
-                hub = extract(endArgs)
-                fam_data[fam_num-1]['HusbandId'] = hub
-                fam_data[fam_num-1]['HusbandName'] = getSpouseName(indi_data, hub)
+                hubID = extract(endArgs)
+                fam_data[fam_num-1]['HusbandId'] = hubID
+                fam_data[fam_num-1]['HusbandName'] = (getIndiById(indi_data, hubID))['Name']
             if(list[1] == 'WIFE'): 
-                wif = extract(endArgs)
-                fam_data[fam_num-1]['WifeId'] = wif
-                fam_data[fam_num-1]['WifeName'] = getSpouseName(indi_data, wif)
+                wifID = extract(endArgs)
+                fam_data[fam_num-1]['WifeId'] = wifID
+                fam_data[fam_num-1]['WifeName'] = (getIndiById(indi_data, wifID))['Name']
             if(list[1] == 'CHIL'): 
-                child_extracted = extract(endArgs)
-                fam_data[fam_num-1]['Children'].append(child_extracted)
+                childID = extract(endArgs)
+                fam_data[fam_num-1]['Children'].append(childID)
             if (list[1] == 'DATE'):
                 if (typeDate == "mar"): 
-                    fam_data[fam_num-1]['Married'] = str(convertDate(list[2:]))
+                    fam_data[fam_num-1]['Married'] = str(convertArgToDate(list[2:]))
                     typeDate = ''   #reset
                 if (typeDate == "div"): 
-                    fam_data[fam_num-1]['Divorced'] = str(convertDate(list[2:]))
+                    fam_data[fam_num-1]['Divorced'] = str(convertArgToDate(list[2:]))
                     typeDate = ''      #needs to have an error if Date doesn't follow any of the 4 
-    
-    #calculate age and make changes to pretty print table 
+    # end of loop 
+
+    #calculate age for the individual record and make changes for pretty-print 
     for row in indi_data:
+        age = 0
+        birth_object = str(row['Birthday'])
+        death_object = str(row['Death'])
+        if (death_object == 'NA') :
+            age = computeAgeDifference(birth_object, getToday(), "overall")
+        else:
+            age = computeAgeDifference(birth_object, death_object, "overall")
+        row['Death'] = str(death_object)
+        row['Birthday'] = str(birth_object)
+        row['Age'] = age
+
         if (row['Child'] == []):
             row['Child'] = 'None'
         if (row['Spouse'] == []):
             row['Spouse'] = 'NA'
-        age = 0
-        birth_object = row['Birthday']
-        death_object = row['Death']
-        if (death_object == 'NA') :
-            age = computeAgeFromToday(birth_object)
-        else:
-            age = computeAgeFromDeath(birth_object, death_object)
-            row['Death'] = str(death_object)
-        row['Birthday'] = str(birth_object)
-        row['Age'] = age
     
     return indi_data, fam_data
 
@@ -168,14 +181,15 @@ def main(filename):
         row_values = row.values()
         family_table.add_row(row_values)
 
-    #story US36
-    recent_deaths_table = make_list_of_recent_deaths(indi_data)
-
     #all errors or anomolies
     errors, anomalies = find_stories(indi_data, fam_data)
+
+    #lists 
+    all_lists = make_list(indi_data, fam_data)
     
-    printOutput(indi_table, family_table, errors, anomalies)
-    # writeToOutput(indi_table, family_table, recent_deaths_table, errors, anomalies)
+    printOutput(indi_table, family_table, errors, anomalies, all_lists)
+    # writeToOutput(indi_table, family_table, recent_deaths_table, errors, anomalies, all_lists)
+
 
 if __name__ == "__main__":
     file = sys.argv[1]
