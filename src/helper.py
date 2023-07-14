@@ -15,21 +15,9 @@ def convertArgToDate(arg):
     year = int(arg[2])
     return date(year, month,day)
 
-#TO DEPRICATE
-def computeAgeFromToday(birth):
-    today = date.today()
-    age = today.year - birth.year - ((today.month, today.day) < (birth.month, birth.day))
-    return age
-
-#TO DEPRICATE 
 def computeAgeFromDeath(birth, death):
     age = death.year - birth.year - ((death.month, death.day) < (birth.month, birth.day))
     return age
-
-#TO DEPRICATE
-def getSpouseName(table, id):
-    for row in table:
-        if (row['ID'] == id): return row['Name']
 
 #Get record for individual ID 
 def getIndiById(table, id):    
@@ -64,17 +52,11 @@ def datesWithinLimit(date1, date2, limit, units):
     return diff <= limit 
 
 #Compute the difference between two dates given unit
-#units is a string ('days', 'months', 'years', 'overall')
+#units is a string ('overall')
 def computeAgeDifference(start, end, units):
     d1 = datetime.strptime(start, '%Y-%m-%d')
     d2 = datetime.strptime(end, '%Y-%m-%d')
-    if (units == "days"):
-        return (d2 - d1).days 
-    elif (units == "months"):
-        return (d2.year - d1.year) * 12 + (d2.month - d1.month)
-    elif (units == "years"):
-        return d2.year - d1.year 
-    elif (units == "overall"):
+    if (units == "overall"):
         return d2.year - d1.year - ((d2.month, d2.day) < (d1.month, d1.day))
     else:
         return 
@@ -90,16 +72,6 @@ def computeAgeDifferenceInDays(date1, date2):
     d1 = datetime.strptime(date1, '%Y-%m-%d')
     d2 = datetime.strptime(date2, '%Y-%m-%d')
     return (d2 - d1).days
-
-##DEPRICATE
-def days_before_today(days):
-    return date.today()-timedelta(days)
-
-def betweenTodayAndNum(inputDate, numOfDays):
-    date_obj = datetime.strptime(inputDate, '%Y-%m-%d').date()
-    if (days_before_today(numOfDays) <= date_obj <= date.today() ):
-        return True
-    else: return False 
 
 #Write to output file 
 def writeToOutput(indi_table, family_table, recent_deaths_table, errors, anomalies, all_lists):

@@ -126,11 +126,11 @@ def parser(filename):
             if(list[1] == 'HUSB'): 
                 hubID = extract(endArgs)
                 fam_data[fam_num-1]['HusbandId'] = hubID
-                fam_data[fam_num-1]['HusbandName'] = getSpouseName(indi_data, hubID)
+                fam_data[fam_num-1]['HusbandName'] = (getIndiById(indi_data, hubID))['Name']
             if(list[1] == 'WIFE'): 
                 wifID = extract(endArgs)
                 fam_data[fam_num-1]['WifeId'] = wifID
-                fam_data[fam_num-1]['WifeName'] = getSpouseName(indi_data, wifID)
+                fam_data[fam_num-1]['WifeName'] = (getIndiById(indi_data, wifID))['Name']
             if(list[1] == 'CHIL'): 
                 childID = extract(endArgs)
                 fam_data[fam_num-1]['Children'].append(childID)
