@@ -29,12 +29,12 @@ class TestBirthBeforeMarriage(unittest.TestCase):
     def test_error_1(self):
         self.prep(f_errors)
         check_birth_before_marriage(self.indi_data, self.fam_data, self.errors)
-        self.assertEqual(self.errors[0], "ERROR: INDIVIDUAL: US08: Birth date (1970-04-14) of Angela Zheng (I7) occurs on the same day or after her marriage (1970-04-14)")
+        self.assertEqual(self.errors[0], "ERROR: INDIVIDUAL: US08: Birth date (1970-04-14) of Angela Zheng (I7) occurs on the same day or after her marriage date (1970-04-14)")
 
     def test_error_2(self):
         self.prep(f_errors)
         check_birth_before_marriage(self.indi_data, self.fam_data, self.errors)
-        self.assertEqual(self.errors[1], "ERROR: INDIVIDUAL: US08: Birth date (1999-08-08) of Kelly Peng /Peng/ (I9) occurs on the same day or after her marriage (1998-05-08)")
+        self.assertEqual(self.errors[1], "ERROR: INDIVIDUAL: US08: Birth date (1999-08-08) of Kelly Peng /Peng/ (I9) occurs on the same day or after her marriage date (1998-05-08)")
 
     def test_no_errors(self):
         self.prep(f_no_error)
