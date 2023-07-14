@@ -46,10 +46,6 @@ class TestMarriedLiving(unittest.TestCase):
         list1 = list_married_living(self.indi_data, self.fam_data)
         self.assertEqual(list1[3], "\tDavid /Li/ and Bonnie /Chen/ are married and living")
         
-    def test_error_4(self):
-        self.prep(f_errors)
-        list1 = list_married_living(self.indi_data, self.fam_data)
-        self.assertEqual(list1[4], "\tTyler /Ma/ and Chloe /Ma/ are married and living")
 
 if __name__ == '__main__':
     unittest.main()

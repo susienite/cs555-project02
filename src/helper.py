@@ -61,6 +61,11 @@ def computeAgeDifference(start, end, units):
     else:
         return 
 
+#Compute the difference between two dates in terms of years
+def computeAgeDifferenceInYears(birth1, birth2):
+    age = birth2.year - birth1.year - ((birth2.month, birth2.day) < (birth1.month, birth1.day))
+    return age
+
 #Compute the difference between two dates in terms of months
 def computeAgeDifferenceInMonths(date1, date2):    
     d1 = datetime.strptime(date1, '%Y-%m-%d')
