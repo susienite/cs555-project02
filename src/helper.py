@@ -91,6 +91,16 @@ def computeAgeDifferenceInDays(date1, date2):
     d2 = datetime.strptime(date2, '%Y-%m-%d')
     return (d2 - d1).days
 
+##DEPRICATE
+def days_before_today(days):
+    return date.today()-timedelta(days)
+
+def betweenTodayAndNum(inputDate, numOfDays):
+    date_obj = datetime.strptime(inputDate, '%Y-%m-%d').date()
+    if (days_before_today(numOfDays) <= date_obj <= date.today() ):
+        return True
+    else: return False 
+
 #Write to output file 
 def writeToOutput(indi_table, family_table, recent_deaths_table, errors, anomalies, all_lists):
     with open('output.txt', 'w') as f:
