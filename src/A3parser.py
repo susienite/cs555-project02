@@ -34,7 +34,7 @@ def find_stories(indi_data, fam_data):
     check_marriage_before_divorce(fam_data, errors)
     check_no_bigamy(fam_data, anomalies)
     check_less_than_15_siblings(fam_data, errors)
-    check_at_most_pentuplets(fam_data, errors) # collaborative driver/navigator function
+    check_at_most_pentuplets(indi_data, fam_data, errors) # collaborative driver/navigator function
     # ...
     
     return (errors, anomalies)

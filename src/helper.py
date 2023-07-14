@@ -114,3 +114,7 @@ def printOutput(indi_table, family_table, errors, anomalies, all_lists):
     for list in all_lists:
         for line in list:
             print(line)
+            
+def findByValue(table, key, value):
+    for row in table:
+        if (row[key] == value): return row
