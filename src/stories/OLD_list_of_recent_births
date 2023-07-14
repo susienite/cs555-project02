@@ -1,0 +1,17 @@
+from helper import *
+from prettytable import PrettyTable
+
+def make_list_of_recent_births(indi_data):
+    table = PrettyTable()
+    list = []
+    table.title = 'List of Recent Births (within last 30 days)'
+
+    table.field_names = ['ID', 'Name', 'Birthday']
+    for person in indi_data:
+        birth = person['Birthday']
+        if (birth == None or birth == 'NA'):
+            continue
+        elif (betweenTodayAndNum(birth, 30)):
+            table.add_row([person['ID'], person['Name'], birth])
+            list.append([person['ID'], person['Name'], birth])
+    return table, list
