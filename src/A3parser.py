@@ -13,6 +13,8 @@ from stories.marriage_before_divorce2 import check_marriage_before_divorce
 from stories.check_no_bigamy import check_no_bigamy
 from stories.check_less_than_15_siblings import check_less_than_15_siblings
 from stories.check_at_most_pentuplets import check_at_most_pentuplets
+from stories.correct_gender_for_role import check_correct_gender_for_role
+from stories.list_deceased import list_deceased
 
 valid_tags = {'INDI': '0', 'NAME': '1', 'SEX': '1', 'BIRT': '1', 'DEAT': '1', 'FAMC': '1', 
             'FAMS': '1', 'FAM': '0', 'HUSB': '1', 'WIFE': '1', 'CHIL': '1', 'MARR':'1' ,'DIV': '1', 
@@ -35,6 +37,10 @@ def find_stories(indi_data, fam_data):
     check_no_bigamy(fam_data, anomalies)
     check_less_than_15_siblings(fam_data, errors)
     check_at_most_pentuplets(indi_data, fam_data, errors) # collaborative driver/navigator function
+
+    #sprint 3
+    check_correct_gender_for_role(indi_data, fam_data, errors)
+    
     # ...
     
     return (errors, anomalies)
@@ -45,6 +51,10 @@ def make_list(indi_data, fam_data):
     #sprint 2 
     all_lists.append(make_list_of_recent(indi_data, 'Death'))
     all_lists.append(make_list_of_recent(indi_data, 'Birthday'))
+    
+    #sprint 3
+    all_lists.append(list_deceased(indi_data))
+    
 
     return all_lists
 
