@@ -17,6 +17,9 @@ from stories.correct_gender_for_role import check_correct_gender_for_role
 from stories.list_deceased import list_deceased
 from stories.birth_before_death import check_birth_before_death
 from stories.list_large_age_diff import list_large_age_diff
+from stories.check_male_last_names import check_male_last_names
+from stories.check_unique_ids import check_unique_ids
+from stories.check_born_after_marriage import check_born_after_marriage
 
 valid_tags = {'INDI': '0', 'NAME': '1', 'SEX': '1', 'BIRT': '1', 'DEAT': '1', 'FAMC': '1', 
             'FAMS': '1', 'FAM': '0', 'HUSB': '1', 'WIFE': '1', 'CHIL': '1', 'MARR':'1' ,'DIV': '1', 
@@ -43,7 +46,9 @@ def find_stories(indi_data, fam_data):
     #sprint 3
     check_correct_gender_for_role(indi_data, fam_data, errors)
     check_birth_before_death(indi_data, errors)
-    
+    check_male_last_names(indi_data, fam_data, errors)
+    check_born_after_marriage(indi_data, fam_data, errors)
+    # check_unique_ids(indi_data, fam_data, errors)
     # ...
     
     return (errors, anomalies)
