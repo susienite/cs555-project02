@@ -13,6 +13,8 @@ from stories.marriage_before_divorce2 import check_marriage_before_divorce
 from stories.check_no_bigamy import check_no_bigamy
 from stories.check_less_than_15_siblings import check_less_than_15_siblings
 from stories.check_at_most_pentuplets import check_at_most_pentuplets
+from stories.correct_gender_for_role import check_correct_gender_for_role
+from stories.list_deceased import list_deceased
 from stories.birth_before_death import check_birth_before_death
 from stories.list_large_age_diff import list_large_age_diff
 
@@ -36,11 +38,13 @@ def find_stories(indi_data, fam_data):
     check_marriage_before_divorce(fam_data, errors)
     check_no_bigamy(fam_data, anomalies)
     check_less_than_15_siblings(fam_data, errors)
-    check_at_most_pentuplets(fam_data, errors) # collaborative driver/navigator function
-    # ...
+    check_at_most_pentuplets(indi_data, fam_data, errors) # collaborative driver/navigator function
 
     #sprint 3
+    check_correct_gender_for_role(indi_data, fam_data, errors)
     check_birth_before_death(indi_data, errors)
+    
+    # ...
     
     return (errors, anomalies)
 
@@ -50,6 +54,9 @@ def make_list(indi_data, fam_data):
     #sprint 2 
     all_lists.append(make_list_of_recent(indi_data, 'Death'))
     all_lists.append(make_list_of_recent(indi_data, 'Birthday'))
+    
+    #sprint 3
+    all_lists.append(list_deceased(indi_data))
     all_lists.append(list_large_age_diff(indi_data, fam_data))
 
     return all_lists
