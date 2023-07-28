@@ -2,8 +2,6 @@ from helper import *
 
 def list_large_age_diff(indi_data, fam_data):
     list = []
-    heading = "List of Large Age Differences:"
-    list.append(heading)
     for family in fam_data:
         husb = family['HusbandId']
         wife = family['WifeId']
@@ -31,5 +29,8 @@ def list_large_age_diff(indi_data, fam_data):
                 strHA = str(husb_age)
                 strWA = str(wife_age)
                 string = "\t" + wife_row['Name'] + " at age " + strWA + " married " + husb_row['Name'] + " at age " + strHA + " which is " + diff + " times difference"
-                list.append(string)    
+                list.append(string) 
+    if(len(list) > 0): # to avoid printing heading if no recent deaths or births
+        heading = 'List of Large Age Differences' 
+        list.insert(0, heading)   
     return list
