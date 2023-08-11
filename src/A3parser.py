@@ -24,6 +24,8 @@ from stories.list_living_single import list_living_single
 from stories.less_than_150_age import check_less_than_150
 from stories.marriage_before_death import check_marriage_before_death
 from stories.list_orphans import list_orphans
+from stories.check_siblings_should_not_marry import check_siblings_should_not_marry
+from stories.check_first_cousins_should_not_marry import check_first_cousins_should_not_marry
 
 valid_tags = {'INDI': '0', 'NAME': '1', 'SEX': '1', 'BIRT': '1', 'DEAT': '1', 'FAMC': '1', 
             'FAMS': '1', 'FAM': '0', 'HUSB': '1', 'WIFE': '1', 'CHIL': '1', 'MARR':'1' ,'DIV': '1', 
@@ -57,7 +59,10 @@ def find_stories(indi_data, fam_data):
     #sprint 4
     check_less_than_150(indi_data, errors)
     check_marriage_before_death(indi_data, fam_data, errors)
-  
+    check_siblings_should_not_marry(fam_data, anomalies)
+    check_first_cousins_should_not_marry(fam_data, anomalies)
+    
+
     return (errors, anomalies)
 
 def make_list(indi_data, fam_data):
