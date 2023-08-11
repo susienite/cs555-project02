@@ -17,6 +17,11 @@ from stories.correct_gender_for_role import check_correct_gender_for_role
 from stories.list_deceased import list_deceased
 from stories.birth_before_death import check_birth_before_death
 from stories.list_large_age_diff import list_large_age_diff
+from stories.check_male_last_names import check_male_last_names
+from stories.check_unique_ids import check_unique_ids
+from stories.check_born_after_marriage import check_born_after_marriage
+from stories.list_living_single import list_living_single
+from stories.less_than_150_age import check_less_than_150
 from stories.marriage_before_death import check_marriage_before_death
 from stories.list_orphans import list_orphans
 
@@ -45,6 +50,12 @@ def find_stories(indi_data, fam_data):
     #sprint 3
     check_correct_gender_for_role(indi_data, fam_data, errors)
     check_birth_before_death(indi_data, errors)
+    check_male_last_names(indi_data, fam_data, errors)
+    check_born_after_marriage(indi_data, fam_data, errors)
+    # check_unique_ids(indi_data, fam_data, errors)
+    
+    #sprint 4
+    check_less_than_150(indi_data, errors)
     
     #sprint 4
     check_marriage_before_death(indi_data, fam_data, errors)
@@ -63,6 +74,9 @@ def make_list(indi_data, fam_data):
     #sprint 3
     all_lists.append(list_deceased(indi_data))
     all_lists.append(list_large_age_diff(indi_data, fam_data))
+    
+    #sprint 4
+    all_lists.append(list_living_single(indi_data))
 
     #sprint 4
     all_lists.append(list_orphans(indi_data, fam_data))

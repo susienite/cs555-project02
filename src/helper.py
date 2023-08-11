@@ -53,10 +53,22 @@ def datesWithinLimit(date1, date2, limit, units):
 
 #Compute the difference between two dates in terms of years
 def computeAgeDifferenceInYears(date1, date2):
-    birth1 = datetime.strptime(date1, '%Y-%m-%d')
-    birth2 = datetime.strptime(date2, '%Y-%m-%d')
-    age = birth2.year - birth1.year - ((birth2.month, birth2.day) < (birth1.month, birth1.day))
-    return age
+    if isinstance(date1, date):
+        d1 = date1
+    else:
+        d1 = datetime.strptime(date1, '%Y-%m-%d').date()
+
+    if isinstance(date2, date):
+        d2 = date2
+    else:
+        d2 = datetime.strptime(date2, '%Y-%m-%d').date()
+
+    age_difference_years = d2.year - d1.year
+    if (d2.month, d2.day) < (d1.month, d1.day):
+        age_difference_years -= 1
+
+    return age_difference_years
+
 
 #Compute the difference between two dates in terms of months
 def computeAgeDifferenceInMonths(date1, date2):    
