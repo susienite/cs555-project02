@@ -20,6 +20,8 @@ from stories.list_large_age_diff import list_large_age_diff
 from stories.check_male_last_names import check_male_last_names
 from stories.check_unique_ids import check_unique_ids
 from stories.check_born_after_marriage import check_born_after_marriage
+from stories.list_living_single import list_living_single
+from stories.less_than_150_age import check_less_than_150
 
 valid_tags = {'INDI': '0', 'NAME': '1', 'SEX': '1', 'BIRT': '1', 'DEAT': '1', 'FAMC': '1', 
             'FAMS': '1', 'FAM': '0', 'HUSB': '1', 'WIFE': '1', 'CHIL': '1', 'MARR':'1' ,'DIV': '1', 
@@ -49,6 +51,10 @@ def find_stories(indi_data, fam_data):
     check_male_last_names(indi_data, fam_data, errors)
     check_born_after_marriage(indi_data, fam_data, errors)
     # check_unique_ids(indi_data, fam_data, errors)
+    
+    #sprint 4
+    check_less_than_150(indi_data, errors)
+    
     # ...
     
     return (errors, anomalies)
@@ -63,6 +69,9 @@ def make_list(indi_data, fam_data):
     #sprint 3
     all_lists.append(list_deceased(indi_data))
     all_lists.append(list_large_age_diff(indi_data, fam_data))
+    
+    #sprint 4
+    all_lists.append(list_living_single(indi_data))
 
     return all_lists
 
