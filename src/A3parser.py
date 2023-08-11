@@ -56,8 +56,6 @@ def find_stories(indi_data, fam_data):
     
     #sprint 4
     check_less_than_150(indi_data, errors)
-    
-    #sprint 4
     check_marriage_before_death(indi_data, fam_data, errors)
   
     return (errors, anomalies)
@@ -77,8 +75,6 @@ def make_list(indi_data, fam_data):
     
     #sprint 4
     all_lists.append(list_living_single(indi_data))
-
-    #sprint 4
     all_lists.append(list_orphans(indi_data, fam_data))
 
     return all_lists
