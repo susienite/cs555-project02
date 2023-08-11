@@ -51,18 +51,10 @@ def datesWithinLimit(date1, date2, limit, units):
     diff = abs((d2 - d1).days)/ conversion[units]
     return diff <= limit 
 
-#Compute the difference between two dates given unit
-#units is a string ('overall')
-def computeAgeDifference(start, end, units):
-    d1 = datetime.strptime(start, '%Y-%m-%d')
-    d2 = datetime.strptime(end, '%Y-%m-%d')
-    if (units == "overall"):
-        return d2.year - d1.year - ((d2.month, d2.day) < (d1.month, d1.day))
-    else:
-        return 
-
 #Compute the difference between two dates in terms of years
-def computeAgeDifferenceInYears(birth1, birth2):
+def computeAgeDifferenceInYears(date1, date2):
+    birth1 = datetime.strptime(date1, '%Y-%m-%d')
+    birth2 = datetime.strptime(date2, '%Y-%m-%d')
     age = birth2.year - birth1.year - ((birth2.month, birth2.day) < (birth1.month, birth1.day))
     return age
 

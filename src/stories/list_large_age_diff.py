@@ -14,8 +14,8 @@ def list_large_age_diff(indi_data, fam_data):
         
         if (husb_birth != 'NA' and wife_birth != 'NA' and marr_date != 'NA'):
             #Compute age at marriage. Assume they were alive during marriage.
-            husb_age = computeAgeDifference(husb_birth, marr_date , "overall")
-            wife_age = computeAgeDifference(wife_birth, marr_date, "overall")  
+            husb_age = computeAgeDifferenceInYears(husb_birth, marr_date )
+            wife_age = computeAgeDifferenceInYears(wife_birth, marr_date )  
 
             #Append to list if age of one spouse is more than 2x the other at marriage
             if ((husb_age/wife_age) > 2):
